@@ -1,10 +1,16 @@
 package com.hdjunction.tinyERMService.entity;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "visit")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class Visit {
     // 환자방문 ID
     @Id

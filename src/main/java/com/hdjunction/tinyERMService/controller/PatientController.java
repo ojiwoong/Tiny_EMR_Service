@@ -38,7 +38,7 @@ public class PatientController {
     public ResponseEntity<Message> getAllPatient(@PathVariable(name = "id") Long id){
 
         Message message = new Message();
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(message);
+        return ResponseEntity.status(HttpStatus.OK).body(message);
     }
 
     // 환자 id 조회
@@ -46,6 +46,6 @@ public class PatientController {
     public ResponseEntity<Message> getPatient(@PathVariable(name = "id") Long id){
 
         Message message = new Message();
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(message);
+        return ResponseEntity.status(HttpStatus.OK).body(message);
     }
 }

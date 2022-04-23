@@ -1,9 +1,15 @@
 package com.hdjunction.tinyERMService.entity;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "hospital")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class Hospital {
 
     // 병원 ID
