@@ -1,11 +1,11 @@
-# Tiny_EMR_Service
+## Tiny_EMR_Service
 
-## 프로젝트 환경
+### 프로젝트 환경
 - Language : Java 11.0.10
 - Build : gradle
 - FrameWork : Spring Boot 2.6.7
 
-## 커밋 컨밴션 정의
+### 커밋 컨밴션 정의
 
 ```bash
 ※ 커밋 종류 = 추가, 수정, 삭제 등...
@@ -26,7 +26,7 @@
 # chore    : 기타 변경사항 (빌드 스크립트 수정 등)
 ```
 
-## RESTful API 명세서 정의
+### RESTful API 명세서 정의
 
 ### `POST`  /p**atient**
 
@@ -34,7 +34,7 @@
 
   Request
 
-    ```json
+    ```
     {
        hospitalId, // 병원ID
        name, // 환자명
@@ -53,13 +53,13 @@
     ```
 
 
-### `PUT` /p**atient/:id**
+#### `PUT` /p**atient/:id**
 
 - 환자 수정
 
   Request
 
-    ```json
+    ```
     {
        hospitalId, // 병원ID
        name, // 환자명
@@ -78,14 +78,14 @@
     ```
 
 
-### `DELETE` /p**atient**/:**id**
+#### `DELETE` /p**atient**/:**id**
 
 - 환자 삭제
 
   Response `204(No Content)`
 
 
-### `GET` /p**atient/**:**id**
+#### `GET` /p**atient/**:**id**
 
 - 환자 id 조회
 
@@ -98,7 +98,7 @@
     ```
 
 
-### `GET` /p**atient**
+#### `GET` /p**atient**
 
 - 전체 환자 조회
 
