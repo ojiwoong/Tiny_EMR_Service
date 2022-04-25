@@ -1,6 +1,7 @@
 package com.hdjunction.tinyERMService.service;
 
 import com.hdjunction.tinyERMService.dto.PatientCreateRequest;
+import com.hdjunction.tinyERMService.entity.Hospital;
 import com.hdjunction.tinyERMService.entity.Patient;
 import com.hdjunction.tinyERMService.repository.HospitalRepository;
 import com.hdjunction.tinyERMService.repository.PatientRepository;
@@ -9,14 +10,35 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 public class PatientServiceImpl implements PatientService{
     PatientRepository patientRepository;
+    HospitalRepository hospitalRepository;
 
     @Autowired
     public PatientServiceImpl(PatientRepository patientRepository, HospitalRepository hospitalRepository) {
         this.patientRepository = patientRepository;
+        this.hospitalRepository = hospitalRepository;
+    }
+
+    // 환자 등록
+    @Override
+    @Transactional
+    public Patient createPatient(PatientCreateRequest patientCreateRequest) {
+
+        String createdRegistrationNumber = createRegistrationNumber(patientCreateRequest.getHospitalId());
+
+        Hospital hospital = hospitalRepository.findById(patientCreateRequest.getHospitalId()).orElse(null);
+
+        Patient patient = null;
+
+        if(hospital != null){
+            patient = patientRepository.save(patientCreateRequest.toEntity(hospital, createdRegistrationNumber));
+        }
+
+        return patient;
     }
 
     // 환자 등록번호 생성

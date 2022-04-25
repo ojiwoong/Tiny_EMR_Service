@@ -1,10 +1,13 @@
 package com.hdjunction.tinyERMService.entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "patient")
@@ -42,4 +45,29 @@ public class Patient {
     // 휴대전화번호
     @Column(length = 20)
     private String mobilePhoneNumber;
+
+    @Builder
+    public Patient(Long id, Hospital hospital, String name, String registrationNumber, String genderCode, String dateBirth, String mobilePhoneNumber) {
+        this.id = id;
+        this.hospital = hospital;
+        this.name = name;
+        this.registrationNumber = registrationNumber;
+        this.genderCode = genderCode;
+        this.dateBirth = dateBirth;
+        this.mobilePhoneNumber = mobilePhoneNumber;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
+            return false;
+        Patient patient = (Patient) o;
+        return Objects.equals(id, patient.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.intValue();
+    }
 }
