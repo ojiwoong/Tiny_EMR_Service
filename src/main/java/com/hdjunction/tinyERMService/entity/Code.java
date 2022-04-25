@@ -12,12 +12,12 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class Code {
     @Id
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 20)
     private String code;
 
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 20)
     private String codeGroup;
 
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 20)
     private String name;
 }

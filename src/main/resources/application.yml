@@ -4,6 +4,7 @@ spring:
       enabled: true
       path: /h2-console
 
+
   datasource:
     url: jdbc:h2:~/emr;
     driver-class-name: org.h2.Driver
@@ -15,9 +16,17 @@ spring:
     show-sql: true
     properties:
       hibernate:
-        ddl-auto: create
+        hbm2ddl:
+          auto: create
         format_sql: true
         type:
           descriptor:
             sql: trace
     generate-ddl: true
+    # data.sql 초기 데이터 생성 전 ddl 생성
+    defer-datasource-initialization: true
+
+  # data.sql 초기 데이터 생성
+  sql:
+    init:
+      mode: always

@@ -15,12 +15,12 @@ import javax.persistence.Table;
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class CodeGroup {
     @Id
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 20)
     private String CodeGroup;
 
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 20)
     private String name;
 
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 50)
     private String description;
 }
