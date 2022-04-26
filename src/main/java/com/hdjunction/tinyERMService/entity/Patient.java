@@ -1,9 +1,13 @@
 package com.hdjunction.tinyERMService.entity;
 
+import com.hdjunction.tinyERMService.dto.PatientResponse;
+import com.hdjunction.tinyERMService.dto.VisitDto;
 import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -44,6 +48,10 @@ public class Patient {
     @Column(length = 20)
     private String mobilePhoneNumber;
 
+    // 방문 리스트
+    @OneToMany(mappedBy = "patient")
+    private List<Visit> visitList = new ArrayList<>();
+
     @Builder
     public Patient(Long id, Hospital hospital, String name, String registrationNumber, String genderCode, String dateBirth, String mobilePhoneNumber) {
         this.id = id;
@@ -53,6 +61,19 @@ public class Patient {
         this.genderCode = genderCode;
         this.dateBirth = dateBirth;
         this.mobilePhoneNumber = mobilePhoneNumber;
+    }
+
+    public PatientResponse toDto(List<VisitDto> visitDto) {
+        return PatientResponse.builder()
+                .id(id)
+                .hospital(hospital)
+                .name(name)
+                .registrationNumber(registrationNumber)
+                .genderCode(genderCode)
+                .dateBirth(dateBirth)
+                .visit(visitDto)
+                .mobilePhoneNumber(mobilePhoneNumber)
+                .build();
     }
 
     @Override

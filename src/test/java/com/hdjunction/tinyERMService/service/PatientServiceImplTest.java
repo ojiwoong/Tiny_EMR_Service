@@ -1,6 +1,7 @@
 package com.hdjunction.tinyERMService.service;
 
 import com.hdjunction.tinyERMService.dto.PatientCreateRequest;
+import com.hdjunction.tinyERMService.dto.PatientResponse;
 import com.hdjunction.tinyERMService.dto.PatientUpdateRequest;
 import com.hdjunction.tinyERMService.entity.Hospital;
 import com.hdjunction.tinyERMService.entity.Patient;
@@ -187,5 +188,43 @@ public class PatientServiceImplTest {
         assertEquals(updatedPatient.getRegistrationNumber(), "202200001");
         assertEquals(updatedPatient.getDateBirth(), "1993-04-16");
         assertEquals(updatedPatient.getMobilePhoneNumber(), "010-4321-4321");
+    }
+
+    @Test
+    @DisplayName("환자 id 조회 테스트")
+    public void getPatient() {
+        Hospital hospital = Hospital.builder()
+                .id(3L)
+                .name("경기병원")
+                .nursingInstitutionNumber("3")
+                .directorName("박경기")
+                .build();
+
+        // given
+        // 조회될 환자 mock 객체 생성
+        Mockito.when(patientRepository.findById(2L))
+                .thenReturn(Optional.ofNullable(Patient.builder()
+                        .id(2L)
+                        .hospital(hospital)
+                        .name("오지웅")
+                        .genderCode("M")
+                        .registrationNumber("202200001")
+                        .dateBirth("1994-04-12")
+                        .mobilePhoneNumber("010-1234-1234")
+                        .build()));
+
+
+        // when
+        PatientResponse searchedPatient = patientService.getPatient(2L);
+
+        log.info("id 조회된 환자 => " + searchedPatient);
+
+        // then
+        assertEquals(searchedPatient.getId(), 2L);
+        assertEquals(searchedPatient.getName(), "오지웅");
+        assertEquals(searchedPatient.getGenderCode(), "M");
+        assertEquals(searchedPatient.getRegistrationNumber(), "202200001");
+        assertEquals(searchedPatient.getDateBirth(), "1994-04-12");
+        assertEquals(searchedPatient.getMobilePhoneNumber(), "010-1234-1234");
     }
 }

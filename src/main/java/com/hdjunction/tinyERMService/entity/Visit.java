@@ -1,6 +1,7 @@
 package com.hdjunction.tinyERMService.entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -35,4 +36,13 @@ public class Visit {
     // 방문상태코드
     @Column(nullable = false, length = 10)
     private String visitStatusCode;
+
+    @Builder
+    public Visit(Long id, Hospital hospital, Patient patient, LocalDateTime receptionDate, String visitStatusCode) {
+        this.id = id;
+        this.hospital = hospital;
+        this.patient = patient;
+        this.receptionDate = receptionDate;
+        this.visitStatusCode = visitStatusCode;
+    }
 }

@@ -1,9 +1,6 @@
 package com.hdjunction.tinyERMService.controller;
 
-import com.hdjunction.tinyERMService.dto.Message;
-import com.hdjunction.tinyERMService.dto.PatientCreateRequest;
-import com.hdjunction.tinyERMService.dto.PatientUpdateRequest;
-import com.hdjunction.tinyERMService.dto.StatusEnum;
+import com.hdjunction.tinyERMService.dto.*;
 import com.hdjunction.tinyERMService.entity.Patient;
 import com.hdjunction.tinyERMService.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +67,7 @@ public class PatientController {
         Message message = new Message();
 
         try {
+            // 환자 삭제 서비스 호출
             patientService.deletePatient(id);
 
             message.setMessage(id + "번 환자 삭제 완료");
@@ -93,17 +91,29 @@ public class PatientController {
         }
     }
 
-    // 전체 환자 조회
-    @GetMapping("/patient")
-    public ResponseEntity<Message> getAllPatient(@PathVariable(name = "id") Long id){
-
-        Message message = new Message();
-        return ResponseEntity.status(HttpStatus.OK).body(message);
-    }
-
     // 환자 id 조회
     @GetMapping("/patient/{id}")
     public ResponseEntity<Message> getPatient(@PathVariable(name = "id") Long id){
+
+        // 환자 조회 서비스 호출
+        PatientResponse searchedPatient = patientService.getPatient(id);
+
+        Message message = new Message();
+
+        if(searchedPatient != null){
+            message.setStatus(StatusEnum.OK);
+            message.setData(searchedPatient);
+            message.setMessage(id + "번 환자 조회 성공");
+
+            return ResponseEntity.status(HttpStatus.OK).body(message);
+        }
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message);
+    }
+
+    // 전체 환자 조회
+    @GetMapping("/patient")
+    public ResponseEntity<Message> getAllPatient(@PathVariable(name = "id") Long id){
 
         Message message = new Message();
         return ResponseEntity.status(HttpStatus.OK).body(message);

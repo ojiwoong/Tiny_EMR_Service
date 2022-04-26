@@ -1,7 +1,9 @@
 package com.hdjunction.tinyERMService.service;
 
 import com.hdjunction.tinyERMService.dto.PatientCreateRequest;
+import com.hdjunction.tinyERMService.dto.PatientResponse;
 import com.hdjunction.tinyERMService.dto.PatientUpdateRequest;
+import com.hdjunction.tinyERMService.dto.VisitDto;
 import com.hdjunction.tinyERMService.entity.Hospital;
 import com.hdjunction.tinyERMService.entity.Patient;
 import com.hdjunction.tinyERMService.repository.HospitalRepository;
@@ -11,7 +13,9 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PatientServiceImpl implements PatientService{
@@ -61,9 +65,22 @@ public class PatientServiceImpl implements PatientService{
         return patient;
     }
 
+    // 환자 삭제
     @Override
     public void deletePatient(Long patientId) {
         patientRepository.deleteById(patientId);
+    }
+
+    // 환자 id 조회
+    @Override
+    public PatientResponse getPatient(Long patientId) {
+        Patient patient = patientRepository.findById(patientId).orElse(null);
+
+        // 양방향 1:N 관계 순환참조 방지를 위해 visitDtoList 에 필요한 데이터만 담기
+        List<VisitDto> visitDtoList = patient.getVisitList().stream().map(visit -> new VisitDto(visit))
+                                                                    .collect(Collectors.toList());
+
+        return patient.toDto(visitDtoList);
     }
 
     // 환자 등록번호 생성
