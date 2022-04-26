@@ -61,6 +61,11 @@ public class PatientServiceImpl implements PatientService{
         return patient;
     }
 
+    @Override
+    public void deletePatient(Long patientId) {
+        patientRepository.deleteById(patientId);
+    }
+
     // 환자 등록번호 생성
     @Override
     public String createRegistrationNumber(Long hospitalId) {

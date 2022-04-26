@@ -11,6 +11,9 @@ public interface PatientService {
     // 환자 수정
     Patient updatePatient(Long patientId, PatientUpdateRequest patientUpdateRequest);
 
+    // 환자 삭제
+    void deletePatient(Long patientId);
+
     // 환자 등록번호 생성
     String createRegistrationNumber(Long hospitalId);
 }

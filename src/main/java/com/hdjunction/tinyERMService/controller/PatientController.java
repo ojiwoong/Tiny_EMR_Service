@@ -7,6 +7,7 @@ import com.hdjunction.tinyERMService.dto.StatusEnum;
 import com.hdjunction.tinyERMService.entity.Patient;
 import com.hdjunction.tinyERMService.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -67,7 +68,26 @@ public class PatientController {
     public ResponseEntity<Message> deletePatient(@PathVariable(name = "id") Long id){
 
         Message message = new Message();
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(message);
+
+        try {
+            patientService.deletePatient(id);
+
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(message);
+        }
+        // 미등록 환자 삭제 시
+        catch (EmptyResultDataAccessException ex){
+            message.setMessage("해당 id로 등록된 환자가 존재하지 않습니다.");
+            message.setStatus(StatusEnum.INTERNAL_SERER_ERROR);
+
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(message);
+        }
+        // 그외 예외 발생 시
+        catch (Exception ex) {
+            message.setMessage(ex.getMessage());
+            message.setStatus(StatusEnum.INTERNAL_SERER_ERROR);
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message);
+        }
     }
 
     // 전체 환자 조회
