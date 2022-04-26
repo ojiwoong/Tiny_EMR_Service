@@ -2,6 +2,7 @@ package com.hdjunction.tinyERMService.controller;
 
 import com.hdjunction.tinyERMService.dto.Message;
 import com.hdjunction.tinyERMService.dto.PatientCreateRequest;
+import com.hdjunction.tinyERMService.dto.PatientUpdateRequest;
 import com.hdjunction.tinyERMService.dto.StatusEnum;
 import com.hdjunction.tinyERMService.entity.Patient;
 import com.hdjunction.tinyERMService.service.PatientService;
@@ -26,13 +27,13 @@ public class PatientController {
     public ResponseEntity<Message> createPatient(@RequestBody PatientCreateRequest patientCreateRequest){
 
         // 환자 등록 서비스 호출
-        Patient patient = patientService.createPatient(patientCreateRequest);
+        Patient createdPatient = patientService.createPatient(patientCreateRequest);
 
         Message message = new Message();
 
-        if(patient != null){
+        if(createdPatient != null){
             message.setStatus(StatusEnum.OK);
-            message.setData(patient);
+            message.setData(createdPatient);
             message.setMessage("환자 등록 성공");
 
             return ResponseEntity.status(HttpStatus.OK).body(message);
@@ -43,10 +44,22 @@ public class PatientController {
 
     // 환자 수정
    @PutMapping("/patient/{id}")
-    public ResponseEntity<Message> updatePatient(@PathVariable(name = "id") Long id){
+    public ResponseEntity<Message> updatePatient(@PathVariable(name = "id") Long id, @RequestBody PatientUpdateRequest updateRequest){
 
-        Message message = new Message();
-        return ResponseEntity.status(HttpStatus.OK).body(message);
+        // 환자 수정 서비스 호출
+       Patient updatedPatient = patientService.updatePatient(id, updateRequest);
+
+       Message message = new Message();
+
+       if(updatedPatient != null){
+           message.setStatus(StatusEnum.OK);
+           message.setData(updatedPatient);
+           message.setMessage("환자 수정 성공");
+
+           return ResponseEntity.status(HttpStatus.OK).body(message);
+       }
+
+       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message);
     }
 
     // 환자 삭제

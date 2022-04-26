@@ -3,6 +3,7 @@ package com.hdjunction.tinyERMService.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hdjunction.tinyERMService.dto.PatientCreateRequest;
+import com.hdjunction.tinyERMService.dto.PatientUpdateRequest;
 import com.hdjunction.tinyERMService.entity.Hospital;
 import com.hdjunction.tinyERMService.entity.Patient;
 import com.hdjunction.tinyERMService.repository.HospitalRepository;
@@ -100,6 +101,66 @@ public class PatientControllerTest {
                 .andExpect(jsonPath(expectHospitalByName, "서울 병원").exists())
                 .andExpect(jsonPath(expectHospitalByNursingInstitutionNumber, 1).exists())
                 .andExpect(jsonPath(expectHospitalByDirectorName, "김서울").exists())
+                .andDo(print());
+    }
+
+    // PUT: http://localhost:8080/patient/{id}
+    @Test
+    @DisplayName("환자 수정 테스트")
+    void updatePatient() throws Exception {
+        Hospital hospital = Hospital.builder()
+                .id(2L)
+                .name("인천 병원")
+                .nursingInstitutionNumber("2")
+                .directorName("이인천")
+                .build();
+
+
+        // given : Mock 객체가 특정 상황에서 해야하는 행위를 정의하는 메소드
+        given(patientService.updatePatient(2L, new PatientUpdateRequest("권혜원", "F", "1993-04-16","010-4321-4321")))
+                .willReturn(
+                        new Patient(1L, hospital, "권혜원", "202200001","F", "1993-04-16", "010-4321-4321")
+                );
+
+        PatientUpdateRequest patientUpdateRequest = PatientUpdateRequest.builder()
+                .name("권혜원")
+                .genderCode("F")
+                .dateBirth("1993-04-16")
+                .mobilePhoneNumber("010-4321-4321")
+                .build();
+
+
+        String content = new ObjectMapper().writeValueAsString(patientUpdateRequest);
+
+        String expectDataById = "$..data[?(@.id == '%s')]";
+        String expectDataByName = "$..data[?(@.name == '%s')]";
+        String expectDataByRegistrationNumber = "$..data[?(@.registrationNumber == '%s')]";
+        String expectDataByGenderCode = "$..data[?(@.genderCode == '%s')]";
+        String expectDataByDateBirth = "$..data[?(@.dateBirth == '%s')]";
+        String expectDataByMobilePhoneNumber = "$..data[?(@.mobilePhoneNumber == '%s')]";
+
+        String expectHospitalById = "$..data.hospital[?(@.id == '%s')]";
+        String expectHospitalByName = "$..data.hospital[?(@.name == '%s')]";
+        String expectHospitalByNursingInstitutionNumber = "$..data.hospital[?(@.nursingInstitutionNumber == '%s')]";
+        String expectHospitalByDirectorName = "$..data.hospital[?(@.directorName == '%s')]";
+
+        // andExpect : 기대하는 값이 나왔는지 체크
+        mockMvc.perform(
+                        put("/patient/2")
+                                .content(content)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath(expectDataById, 1).exists())
+                .andExpect(jsonPath(expectDataByName, "권혜원").exists())
+                .andExpect(jsonPath(expectDataByRegistrationNumber, "202200001").exists())
+                .andExpect(jsonPath(expectDataByGenderCode, "F").exists())
+                .andExpect(jsonPath(expectDataByDateBirth, "1993-04-16").exists())
+                .andExpect(jsonPath(expectDataByMobilePhoneNumber, "010-4321-4321").exists())
+
+                .andExpect(jsonPath(expectHospitalById, 2).exists())
+                .andExpect(jsonPath(expectHospitalByName, "인천 병원").exists())
+                .andExpect(jsonPath(expectHospitalByNursingInstitutionNumber, 2).exists())
+                .andExpect(jsonPath(expectHospitalByDirectorName, "이인천").exists())
                 .andDo(print());
     }
 }

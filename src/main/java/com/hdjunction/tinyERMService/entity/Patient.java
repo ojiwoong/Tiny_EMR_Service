@@ -1,9 +1,6 @@
 package com.hdjunction.tinyERMService.entity;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -12,6 +9,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "patient")
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class Patient {
 

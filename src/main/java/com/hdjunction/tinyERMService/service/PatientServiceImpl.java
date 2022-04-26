@@ -1,6 +1,7 @@
 package com.hdjunction.tinyERMService.service;
 
 import com.hdjunction.tinyERMService.dto.PatientCreateRequest;
+import com.hdjunction.tinyERMService.dto.PatientUpdateRequest;
 import com.hdjunction.tinyERMService.entity.Hospital;
 import com.hdjunction.tinyERMService.entity.Patient;
 import com.hdjunction.tinyERMService.repository.HospitalRepository;
@@ -36,6 +37,25 @@ public class PatientServiceImpl implements PatientService{
 
         if(hospital != null){
             patient = patientRepository.save(patientCreateRequest.toEntity(hospital, createdRegistrationNumber));
+        }
+
+        return patient;
+    }
+
+    // 환자 수정
+    @Override
+    public Patient updatePatient(Long patientId, PatientUpdateRequest patientUpdateRequest) {
+        // 수정할 환자 조회
+        Patient patient = patientRepository.findById(patientId).orElse(null);
+
+        if(patient != null){
+            // 환자 데이터 수정 (이름, 성별, 휴대폰번호, 생년월일)
+            patient.setDateBirth(patientUpdateRequest.getDateBirth());
+            patient.setGenderCode(patientUpdateRequest.getGenderCode());
+            patient.setName(patientUpdateRequest.getName());
+            patient.setMobilePhoneNumber(patientUpdateRequest.getMobilePhoneNumber());
+
+            patient = patientRepository.save(patient);
         }
 
         return patient;
