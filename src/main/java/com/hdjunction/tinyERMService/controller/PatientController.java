@@ -72,14 +72,17 @@ public class PatientController {
         try {
             patientService.deletePatient(id);
 
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(message);
+            message.setMessage(id + "번 환자 삭제 완료");
+            message.setStatus(StatusEnum.OK);
+
+            return ResponseEntity.status(HttpStatus.OK).body(message);
         }
         // 미등록 환자 삭제 시
         catch (EmptyResultDataAccessException ex){
             message.setMessage("해당 id로 등록된 환자가 존재하지 않습니다.");
-            message.setStatus(StatusEnum.INTERNAL_SERER_ERROR);
+            message.setStatus(StatusEnum.NO_CONTENT);
 
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(message);
+            return ResponseEntity.status(HttpStatus.OK).body(message);
         }
         // 그외 예외 발생 시
         catch (Exception ex) {
