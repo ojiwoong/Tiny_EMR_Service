@@ -115,10 +115,10 @@ public class PatientController {
 
     // 전체 환자 조회
     @GetMapping("/patient")
-    public ResponseEntity<Message> getAllPatient(){
+    public ResponseEntity<Message> getAllPatient(@RequestBody PatientSearchKeyword patientSearchKeyword){
 
         // 전체 환자 조회 서비스 호출
-        List<PatientResponse> searchedPatientList = patientService.getAllPatient();
+        List<PatientResponse> searchedPatientList = patientService.getAllPatient(patientSearchKeyword);
 
         Message message = new Message();
 

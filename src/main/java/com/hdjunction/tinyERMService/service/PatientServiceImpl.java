@@ -3,6 +3,7 @@ package com.hdjunction.tinyERMService.service;
 import com.hdjunction.tinyERMService.dto.*;
 import com.hdjunction.tinyERMService.entity.Hospital;
 import com.hdjunction.tinyERMService.entity.Patient;
+import com.hdjunction.tinyERMService.querydsl.PatientRepositoryCustom;
 import com.hdjunction.tinyERMService.repository.HospitalRepository;
 import com.hdjunction.tinyERMService.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +20,14 @@ import java.util.stream.Collectors;
 public class PatientServiceImpl implements PatientService{
     PatientRepository patientRepository;
     HospitalRepository hospitalRepository;
+    PatientRepositoryCustom patientRepositoryCustom;
 
     @Autowired
-    public PatientServiceImpl(PatientRepository patientRepository, HospitalRepository hospitalRepository) {
+    public PatientServiceImpl(PatientRepository patientRepository, HospitalRepository hospitalRepository, PatientRepositoryCustom patientRepositoryCustom) {
         this.patientRepository = patientRepository;
         this.hospitalRepository = hospitalRepository;
+        this.patientRepositoryCustom = patientRepositoryCustom;
     }
-
     // 환자 등록
     @Override
     @Transactional
@@ -89,11 +91,11 @@ public class PatientServiceImpl implements PatientService{
 
     // 전체 환자 조회
     @Override
-    public List<PatientResponse> getAllPatient() {
+    public List<PatientResponse> getAllPatient(PatientSearchKeyword patientSearchKeyword) {
 
         List<PatientResponse> patientGetAllResponseList = new ArrayList<>();
 
-        List<Patient> patientList = patientRepository.findAll();
+        List<Patient> patientList = patientRepositoryCustom.findByNameAndRegistrationNumberAndDateBirth(patientSearchKeyword);
 
         // 양방향 1:N 관계 순환참조 방지를 위해 visitDtoList 에 필요한 데이터만 담기
         patientList.forEach(patient -> {

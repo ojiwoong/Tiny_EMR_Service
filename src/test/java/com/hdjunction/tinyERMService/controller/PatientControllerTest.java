@@ -258,9 +258,13 @@ public class PatientControllerTest {
                                                             .recentReceptionDate("2022-04-16")
                                                             .build());
 
-
         // given : Mock 객체가 특정 상황에서 해야하는 행위를 정의하는 메소드
-        given(patientService.getAllPatient())
+        given(patientService.getAllPatient(PatientSearchKeyword.builder()
+                .name("")
+                .registrationNumber("")
+                .dateBirth("")
+                .build()
+                ))
                 .willReturn(patientGetAllResponseList);
 
         String expectDataById = "$..data[?(@.id == '%s')]";
