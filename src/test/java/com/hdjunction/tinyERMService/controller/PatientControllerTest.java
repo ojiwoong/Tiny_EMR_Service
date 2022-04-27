@@ -3,7 +3,7 @@ package com.hdjunction.tinyERMService.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hdjunction.tinyERMService.dto.*;
 import com.hdjunction.tinyERMService.entity.Hospital;
-import com.hdjunction.tinyERMService.entity.Patient;
+import com.hdjunction.tinyERMService.querydsl.PatientSearchKeyword;
 import com.hdjunction.tinyERMService.service.PatientServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,6 +11,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -258,14 +263,17 @@ public class PatientControllerTest {
                                                             .recentReceptionDate("2022-04-16")
                                                             .build());
 
+
+        Pageable pageable =  PageRequest.of(1, 8);
+
         // given : Mock 객체가 특정 상황에서 해야하는 행위를 정의하는 메소드
         given(patientService.getAllPatient(PatientSearchKeyword.builder()
                 .name("")
                 .registrationNumber("")
                 .dateBirth("")
-                .build()
-                ))
-                .willReturn(patientGetAllResponseList);
+                .build(), pageable)
+        )
+                .willReturn(new PageImpl(patientGetAllResponseList, pageable, patientGetAllResponseList.size()) );
 
         String expectDataById = "$..data[?(@.id == '%s')]";
         String expectDataByName = "$..data[?(@.name == '%s')]";

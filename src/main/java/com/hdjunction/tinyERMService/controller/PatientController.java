@@ -1,10 +1,13 @@
 package com.hdjunction.tinyERMService.controller;
 
 import com.hdjunction.tinyERMService.dto.*;
-import com.hdjunction.tinyERMService.entity.Patient;
+import com.hdjunction.tinyERMService.querydsl.PatientSearchKeyword;
 import com.hdjunction.tinyERMService.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -115,10 +118,11 @@ public class PatientController {
 
     // 전체 환자 조회
     @GetMapping("/patient")
-    public ResponseEntity<Message> getAllPatient(@RequestBody PatientSearchKeyword patientSearchKeyword){
+    public ResponseEntity<Message> getAllPatient(@RequestBody PatientSearchKeyword patientSearchKeyword,
+                                                 @PageableDefault(size = 8, page = 1) Pageable pageable){
 
         // 전체 환자 조회 서비스 호출
-        List<PatientResponse> searchedPatientList = patientService.getAllPatient(patientSearchKeyword);
+        Page<PatientResponse> searchedPatientList = patientService.getAllPatient(patientSearchKeyword, pageable);
 
         Message message = new Message();
 

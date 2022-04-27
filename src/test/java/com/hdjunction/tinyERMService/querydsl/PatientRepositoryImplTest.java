@@ -1,6 +1,5 @@
 package com.hdjunction.tinyERMService.querydsl;
 
-import com.hdjunction.tinyERMService.dto.PatientSearchKeyword;
 import com.hdjunction.tinyERMService.entity.Patient;
 import com.hdjunction.tinyERMService.service.PatientServiceImpl;
 import com.hdjunction.tinyERMService.service.PatientServiceImplTest;
@@ -11,6 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.List;
 
@@ -37,7 +39,7 @@ public class PatientRepositoryImplTest {
                 .dateBirth("")
                 .build();
 
-        List<Patient> patients = patientRepository.findByNameAndRegistrationNumberAndDateBirth(patientSearchKeyword);
+        List<Patient> patients = patientRepository.findByAllSearchKeyword(patientSearchKeyword);
         
         assertEquals(patients.size(), 1);
         assertEquals(patients.get(0).getName(), "오지웅");
@@ -56,7 +58,7 @@ public class PatientRepositoryImplTest {
                 .dateBirth("")
                 .build();
 
-        List<Patient> patients = patientRepository.findByNameAndRegistrationNumberAndDateBirth(patientSearchKeyword);
+        List<Patient> patients = patientRepository.findByAllSearchKeyword(patientSearchKeyword);
 
         assertEquals(patients.size(), 3);
     }
@@ -71,7 +73,7 @@ public class PatientRepositoryImplTest {
                 .dateBirth("1964-04-01")
                 .build();
 
-        List<Patient> patients = patientRepository.findByNameAndRegistrationNumberAndDateBirth(patientSearchKeyword);
+        List<Patient> patients = patientRepository.findByAllSearchKeyword(patientSearchKeyword);
 
         assertEquals(patients.size(), 1);
         assertEquals(patients.get(0).getName(), "조세호");
@@ -91,8 +93,25 @@ public class PatientRepositoryImplTest {
                 .dateBirth("")
                 .build();
 
-        List<Patient> patients = patientRepository.findByNameAndRegistrationNumberAndDateBirth(patientSearchKeyword);
+        List<Patient> patients = patientRepository.findByAllSearchKeyword(patientSearchKeyword);
 
         assertEquals(patients.size(), 6);
     }
+
+    @Test
+    @DisplayName("환자 동적 전체 검색 페이징 처리")
+    void patientDynamicSearchAllUsingPaging() {
+        PatientSearchKeyword patientSearchKeyword = PatientSearchKeyword.builder()
+                .name("")
+                .registrationNumber("")
+                .dateBirth("")
+                .build();
+
+        Pageable pageable =  PageRequest.of(1, 3);
+
+        Page<Patient> patients = patientRepository.findByAllSearchKeyword(patientSearchKeyword,pageable);
+
+        assertEquals(patients.getContent().size(), 3);
+    }
+    
 }
