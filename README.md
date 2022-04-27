@@ -26,21 +26,77 @@
 # chore    : 기타 변경사항 (빌드 스크립트 수정 등)
 ```
 
+### 파일구조
+```bash
+├── src/
+│    ├── main/
+│    │   └── java/
+│    │          ├── controller/
+│    │          │     ├── PatientController.java
+│    │          │     └── VisitController.java
+│    │          ├── dto/
+│    │          │     ├── CrudEnum.java
+│    │          │     ├── Message.java
+│    │          │     ├── PatientCreateRequest.java
+│    │          │     ├── PatientCreateResponse.java
+│    │          │     ├── PatientGetAllResponse.java
+│    │          │     ├── PatientGetResponse.java
+│    │          │     ├── PatientResponse.java
+│    │          │     ├── PatientUpdateRequest.java
+│    │          │     ├── PatientUpdateResponse.java
+│    │          │     ├── StatusEnum.java
+│    │          │     └── VisitDto.java
+│    │          ├── entity/
+│    │          │     ├── Code.java
+│    │          │     ├── CodeGroup.java
+│    │          │     ├── Hospital.java
+│    │          │     ├── Patient.java
+│    │          │     └── Visit.java
+│    │          ├── querydsl/
+│    │          │     ├── PatientRepositoryCustom.java
+│    │          │     ├── PatientRepositoryImpl.java
+│    │          │     ├── PatientSearchKeyword.java
+│    │          │     └── QuerydslConfig.java
+│    │          ├── repository/
+│    │          │     ├── HospitalRepository.java
+│    │          │     ├── PatientRepository.java
+│    │          │     └── VisitRepository.java
+│    │          ├── service/
+│    │          │     ├── PatientService.java
+│    │          │     ├── PatientServiceImpl.java
+│    │          │     ├── VisitService.java
+│    │          │     └── VisitServiceImpl.java
+│    │          └── TinyErmServiceApplication.java
+│    │
+│    └── test
+│        └── java/
+│             ├── controller/
+│             │    └── PatientControllerTest.java
+│             ├── querydsl/
+│             │    └── PatientRepositoryImplTest.java
+│             ├── service/
+│             │    └── PatientServiceImplTest.java
+│             └── TinyErmServiceApplicationTests.java
+│     
+├── README.md
+└── build.gradle
+``` 
+
 ### RESTful API 명세서 정의
 
 ### `POST`  /p**atient**
 
 - 환자 등록
 
-  Request
+  Request (RequestBody)
 
     ```
     {
-       hospitalId, // 병원ID
-       name, // 환자명
-       genderCode, // 성별코드 
-       dateBirth, // 생년원일 (optinal)
-       mobilePhoneNumber // 휴대전화번호 (optinal)
+      "hospitalId": 2,
+      "name":"오지웅",
+      "genderCode":"M",
+      "dateBirth":"1994-04-12",
+      "mobilePhoneNumber":"010-1234-1234"
     }
     ```
 
@@ -48,8 +104,17 @@
 
     ```
     {
-       patient
+    "status": "OK",
+    "message": "환자 등록 성공",
+    "data": {
+        "id": 7,
+        "name": "오지웅",
+        "registrationNumber": "202200001",
+        "genderCode": "M",
+        "dateBirth": "1994-04-12",
+        "mobilePhoneNumber": "010-1234-1234"
     }
+}
     ```
 
 
@@ -57,15 +122,14 @@
 
 - 환자 수정
 
-  Request
+  Request (RequestBody)
 
     ```
     {
-       hospitalId, // 병원ID
-       name, // 환자명
-       genderCode, // 성별코드 
-       dateBirth, // 생년원일 (optinal)
-       mobilePhoneNumber // 휴대전화번호 (optinal)
+      "name":"오지웅",
+      "genderCode":"M",
+      "dateBirth":"1994-04-14",
+      "mobilePhoneNumber":"010-1234-1234"
     }
     ```
 
@@ -73,7 +137,16 @@
 
     ```
     {
-       patient
+      "status": "OK",
+      "message": "환자 수정 성공",
+      "data": {
+          "id": 2,
+          "name": "오지웅",
+          "registrationNumber": "2022000001",
+          "genderCode": "M",
+          "dateBirth": "1994-04-14",
+          "mobilePhoneNumber": "010-1234-1234"
+      }
     }
     ```
 
@@ -82,7 +155,7 @@
 
 - 환자 삭제
 
-  Response `204(No Content)`
+  Response `200(OK)`
 
 
 #### `GET` /p**atient/**:**id**
@@ -93,19 +166,85 @@
 
     ```
     {
-       patient
+      "status": "OK",
+      "message": "1번 환자 조회 성공",
+      "data": {
+          "id": 1,
+          "hospital": {
+              "id": 2,
+              "name": "인천병원",
+              "nursingInstitutionNumber": "2",
+              "directorName": "이인천"
+          },
+          "name": "오지웅",
+          "registrationNumber": "2022000001",
+          "genderCode": "M",
+          "dateBirth": "1994-04-12",
+          "mobilePhoneNumber": "010-1234-1234",
+          "visit": [
+              {
+                  "id": 2,
+                  "receptionDate": "2022-04-26T11:47:32.59",
+                  "visitStatusCode": "2"
+              },
+              {
+                  "id": 1,
+                  "receptionDate": "2022-04-24T10:37:22.69",
+                  "visitStatusCode": "3"
+              }
+          ]
     }
     ```
 
 
-#### `GET` /p**atient**
+#### `GET` /p**atient**?size={한 페이지 컨텐츠 수}&page={조회할 페이지}
 
 - 전체 환자 조회
+
+  Request (RequestParam, RequestBody)
+
+    ```
+    {
+      "registrationNumber": {검색할 환자등록번호},
+      "name": {검색할 환자명},
+      "dateBirth": {검색할 생년월일}
+    }
+    ```
 
   Response `200(OK)`
 
     ```
     {
-    	[patient, patient ...]
-    }
-    ```
+      "status": "OK",
+      "message": "전체 환자 조회 성공",
+      "data": [
+          {
+              "id": 1,
+              "name": "오지웅",
+              "registrationNumber": "2022000001",
+              "genderCode": "M",
+              "dateBirth": "1994-04-12",
+              "mobilePhoneNumber": "010-1234-1234",
+              "recentReceptionDate": "2022-04-26"
+          },
+          {
+              "id": 2,
+              "name": "유재석",
+              "registrationNumber": "2022000001",
+              "genderCode": "M",
+              "dateBirth": "1954-06-21",
+              "mobilePhoneNumber": "010-1345-1345",
+              "recentReceptionDate": "2022-04-26"
+          },
+          {
+              "id": 3,
+              "name": "조세호",
+              "registrationNumber": "2022000001",
+              "genderCode": "M",
+              "dateBirth": "1964-04-01",
+              "mobilePhoneNumber": "010-3453-2343",
+              "recentReceptionDate": ""
+          }
+      ]
+  }
+  ```
