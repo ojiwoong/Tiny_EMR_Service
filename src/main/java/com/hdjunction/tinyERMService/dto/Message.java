@@ -1,8 +1,11 @@
 package com.hdjunction.tinyERMService.dto;
 
 import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
-@Builder
+@Getter
+@Setter
 public class Message {
     private StatusEnum status;
     private String message;
