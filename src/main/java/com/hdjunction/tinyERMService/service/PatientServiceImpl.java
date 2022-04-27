@@ -29,7 +29,7 @@ public class PatientServiceImpl implements PatientService{
     // 환자 등록
     @Override
     @Transactional
-    public Patient createPatient(PatientCreateRequest patientCreateRequest) {
+    public PatientResponse createPatient(PatientCreateRequest patientCreateRequest) {
 
         String createdRegistrationNumber = createRegistrationNumber(patientCreateRequest.getHospitalId());
 
@@ -41,13 +41,13 @@ public class PatientServiceImpl implements PatientService{
             patient = patientRepository.save(patientCreateRequest.toEntity(hospital, createdRegistrationNumber));
         }
 
-        return patient;
+        return patient.toDto(CrudEnum.CREATE);
     }
 
     // 환자 수정
     @Override
     @Transactional
-    public Patient updatePatient(Long patientId, PatientUpdateRequest patientUpdateRequest) {
+    public PatientResponse updatePatient(Long patientId, PatientUpdateRequest patientUpdateRequest) {
         // 수정할 환자 조회
         Patient patient = patientRepository.findById(patientId).orElse(null);
 
@@ -61,7 +61,7 @@ public class PatientServiceImpl implements PatientService{
             patient = patientRepository.save(patient);
         }
 
-        return patient;
+        return patient.toDto(CrudEnum.UPDATE);
     }
 
     // 환자 삭제
@@ -73,21 +73,25 @@ public class PatientServiceImpl implements PatientService{
 
     // 환자 id 조회
     @Override
-    public PatientGetResponse getPatient(Long patientId) {
+    public PatientResponse getPatient(Long patientId) {
         Patient patient = patientRepository.findById(patientId).orElse(null);
 
         // 양방향 1:N 관계 순환참조 방지를 위해 visitDtoList 에 필요한 데이터만 담기
-        List<VisitDto> visitDtoList = patient.getVisitList().stream().map(visit -> new VisitDto(visit))
-                                                                    .collect(Collectors.toList());
+        List<VisitDto> visitDtoList = new ArrayList<>();
+
+        if(patient.getVisitList() != null){
+            visitDtoList = patient.getVisitList().stream().map(visit -> new VisitDto(visit))
+                                                            .collect(Collectors.toList());
+        }
 
         return patient.toDto(visitDtoList);
     }
 
     // 전체 환자 조회
     @Override
-    public List<PatientGetAllResponse> getAllPatient() {
+    public List<PatientResponse> getAllPatient() {
 
-        List<PatientGetAllResponse> patientGetAllResponseList = new ArrayList<>();
+        List<PatientResponse> patientGetAllResponseList = new ArrayList<>();
 
         List<Patient> patientList = patientRepository.findAll();
 

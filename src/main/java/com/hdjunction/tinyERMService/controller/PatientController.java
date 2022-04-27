@@ -27,7 +27,7 @@ public class PatientController {
     public ResponseEntity<Message> createPatient(@RequestBody PatientCreateRequest patientCreateRequest){
 
         // 환자 등록 서비스 호출
-        Patient createdPatient = patientService.createPatient(patientCreateRequest);
+        PatientResponse createdPatient = patientService.createPatient(patientCreateRequest);
 
         Message message = new Message();
 
@@ -47,7 +47,7 @@ public class PatientController {
     public ResponseEntity<Message> updatePatient(@PathVariable(name = "id") Long id, @RequestBody PatientUpdateRequest updateRequest){
 
         // 환자 수정 서비스 호출
-       Patient updatedPatient = patientService.updatePatient(id, updateRequest);
+       PatientResponse updatedPatient = patientService.updatePatient(id, updateRequest);
 
        Message message = new Message();
 
@@ -98,7 +98,7 @@ public class PatientController {
     public ResponseEntity<Message> getPatient(@PathVariable(name = "id") Long id){
 
         // 환자 조회 서비스 호출
-        PatientGetResponse searchedPatient = patientService.getPatient(id);
+        PatientResponse searchedPatient = patientService.getPatient(id);
 
         Message message = new Message();
 
@@ -118,7 +118,7 @@ public class PatientController {
     public ResponseEntity<Message> getAllPatient(){
 
         // 전체 환자 조회 서비스 호출
-        List<PatientGetAllResponse> searchedPatientList = patientService.getAllPatient();
+        List<PatientResponse> searchedPatientList = patientService.getAllPatient();
 
         Message message = new Message();
 

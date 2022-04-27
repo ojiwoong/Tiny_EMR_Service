@@ -111,7 +111,7 @@ public class PatientServiceImplTest {
                 .thenReturn(Optional.ofNullable(hospital));
 
         // when
-        Patient cratedPatient = patientService.createPatient(patientCreateRequest);
+        PatientCreateResponse cratedPatient = (PatientCreateResponse)patientService.createPatient(patientCreateRequest);
 
         log.info("생성된 환자 => " + cratedPatient);
 
@@ -177,7 +177,7 @@ public class PatientServiceImplTest {
                 );
 
         // when
-        Patient updatedPatient = patientService.updatePatient(2L, patientUpdateRequest);
+        PatientUpdateResponse updatedPatient = (PatientUpdateResponse)patientService.updatePatient(2L, patientUpdateRequest);
 
         log.info("수정된 환자 => " + updatedPatient);
 
@@ -215,7 +215,7 @@ public class PatientServiceImplTest {
 
 
         // when
-        PatientGetResponse searchedPatient = patientService.getPatient(2L);
+        PatientGetResponse searchedPatient = (PatientGetResponse)patientService.getPatient(2L);
 
         log.info("id 조회된 환자 => " + searchedPatient);
 
@@ -285,25 +285,28 @@ public class PatientServiceImplTest {
 
 
         // when
-        List<PatientGetAllResponse> searchedAllPatient = patientService.getAllPatient();
+        List<PatientResponse> searchedAllPatient = patientService.getAllPatient();
+
+        PatientGetAllResponse firstPatient = (PatientGetAllResponse)searchedAllPatient.get(0);
+        PatientGetAllResponse secondPatient = (PatientGetAllResponse)searchedAllPatient.get(1);
 
         log.info("전체 조회된 환자 => " + searchedAllPatient);
 
         // then
-        assertEquals(searchedAllPatient.get(0).getId(), 1L);
-        assertEquals(searchedAllPatient.get(0).getName(), "오지웅");
-        assertEquals(searchedAllPatient.get(0).getGenderCode(), "M");
-        assertEquals(searchedAllPatient.get(0).getRegistrationNumber(), "202200001");
-        assertEquals(searchedAllPatient.get(0).getDateBirth(), "1994-04-12");
-        assertEquals(searchedAllPatient.get(0).getMobilePhoneNumber(), "010-1234-1234");
-        assertEquals(searchedAllPatient.get(0).getRecentReceptionDate(), "2022-04-20");
+        assertEquals(firstPatient.getId(), 1L);
+        assertEquals(firstPatient.getName(), "오지웅");
+        assertEquals(firstPatient.getGenderCode(), "M");
+        assertEquals(firstPatient.getRegistrationNumber(), "202200001");
+        assertEquals(firstPatient.getDateBirth(), "1994-04-12");
+        assertEquals(firstPatient.getMobilePhoneNumber(), "010-1234-1234");
+        assertEquals(firstPatient.getRecentReceptionDate(), "2022-04-20");
 
-        assertEquals(searchedAllPatient.get(1).getId(), 2L);
-        assertEquals(searchedAllPatient.get(1).getName(), "유재석");
-        assertEquals(searchedAllPatient.get(1).getGenderCode(), "M");
-        assertEquals(searchedAllPatient.get(1).getRegistrationNumber(), "202200002");
-        assertEquals(searchedAllPatient.get(1).getDateBirth(), "1954-06-21");
-        assertEquals(searchedAllPatient.get(1).getMobilePhoneNumber(), "010-1345-1345");
-        assertEquals(searchedAllPatient.get(1).getRecentReceptionDate(), "2022-04-20");
+        assertEquals(secondPatient.getId(), 2L);
+        assertEquals(secondPatient.getName(), "유재석");
+        assertEquals(secondPatient.getGenderCode(), "M");
+        assertEquals(secondPatient.getRegistrationNumber(), "202200002");
+        assertEquals(secondPatient.getDateBirth(), "1954-06-21");
+        assertEquals(secondPatient.getMobilePhoneNumber(), "010-1345-1345");
+        assertEquals(secondPatient.getRecentReceptionDate(), "2022-04-20");
     }
 }

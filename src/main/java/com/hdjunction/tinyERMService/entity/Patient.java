@@ -1,8 +1,6 @@
 package com.hdjunction.tinyERMService.entity;
 
-import com.hdjunction.tinyERMService.dto.PatientGetAllResponse;
-import com.hdjunction.tinyERMService.dto.PatientGetResponse;
-import com.hdjunction.tinyERMService.dto.VisitDto;
+import com.hdjunction.tinyERMService.dto.*;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -79,7 +77,7 @@ public class Patient {
 
 
 
-    public PatientGetResponse toDto(List<VisitDto> visitDtoList) {
+    public PatientResponse toDto(List<VisitDto> visitDtoList) {
         return PatientGetResponse.builder()
                 .id(id)
                 .hospital(hospital)
@@ -92,7 +90,7 @@ public class Patient {
                 .build();
     }
 
-    public PatientGetAllResponse toDto(String recentReceptionDate) {
+    public PatientResponse toDto(String recentReceptionDate) {
         return PatientGetAllResponse.builder()
                 .id(id)
                 .name(name)
@@ -102,6 +100,32 @@ public class Patient {
                 .recentReceptionDate(recentReceptionDate)
                 .mobilePhoneNumber(mobilePhoneNumber)
                 .build();
+    }
+
+    public PatientResponse toDto(CrudEnum crudCode) {
+        if(crudCode == CrudEnum.CREATE){
+            return PatientCreateResponse.builder()
+                    .id(id)
+                    .name(name)
+                    .registrationNumber(registrationNumber)
+                    .genderCode(genderCode)
+                    .dateBirth(dateBirth)
+                    .mobilePhoneNumber(mobilePhoneNumber)
+                    .build();
+        }
+
+        if(crudCode == CrudEnum.UPDATE){
+            return PatientUpdateResponse.builder()
+                    .id(id)
+                    .name(name)
+                    .registrationNumber(registrationNumber)
+                    .genderCode(genderCode)
+                    .dateBirth(dateBirth)
+                    .mobilePhoneNumber(mobilePhoneNumber)
+                    .build();
+        }
+
+        return null;
     }
 
     @Override
