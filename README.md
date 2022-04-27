@@ -104,17 +104,17 @@
 
     ```
     {
-    "status": "OK",
-    "message": "환자 등록 성공",
-    "data": {
-        "id": 7,
-        "name": "오지웅",
-        "registrationNumber": "202200001",
-        "genderCode": "M",
-        "dateBirth": "1994-04-12",
-        "mobilePhoneNumber": "010-1234-1234"
+      "status": "OK",
+      "message": "환자 등록 성공",
+      "data": {
+          "id": 7,
+          "name": "오지웅",
+          "registrationNumber": "202200001",
+          "genderCode": "M",
+          "dateBirth": "1994-04-12",
+          "mobilePhoneNumber": "010-1234-1234"
+      }
     }
-}
     ```
 
 
