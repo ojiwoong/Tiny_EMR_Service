@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -96,17 +97,17 @@ public class PatientServiceImpl implements PatientService{
                                                                             .collect(Collectors.toList());
 
             VisitDto visitDto = null;
-            String receptionDate = "";
+            String recentReceptionDate = "";
 
             int recentVisitIdx = 0;
             // 환자 엔티티의 visitList Order by 설정을 접수일시의 내림차순으로 설정했기 때문에 0번째 있는 환자방문 데이터가 최근방문시간
             // 그렇기 때문에 환자 방문 데이터가 있을경우 최근방문 데이터인 0번째 환자 방문 데이터를 추출
             if(visitDtoList.size() > 0) {
                 visitDto = visitDtoList.get(recentVisitIdx);
-                receptionDate = visitDto.getReceptionDate().toString();
+                recentReceptionDate = visitDto.getReceptionDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             }
 
-            patientGetAllResponseList.add(patient.toDto(receptionDate));
+            patientGetAllResponseList.add(patient.toDto(recentReceptionDate));
         });
 
         return patientGetAllResponseList;

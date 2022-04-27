@@ -55,6 +55,18 @@ public class Patient {
     private List<Visit> visitList = new ArrayList<>();
 
     @Builder
+    public Patient(Long id, Hospital hospital, String name, String registrationNumber, String genderCode, String dateBirth, String mobilePhoneNumber, List<Visit> visitList) {
+        this.id = id;
+        this.hospital = hospital;
+        this.name = name;
+        this.registrationNumber = registrationNumber;
+        this.genderCode = genderCode;
+        this.dateBirth = dateBirth;
+        this.mobilePhoneNumber = mobilePhoneNumber;
+        this.visitList = visitList;
+    }
+
+    @Builder
     public Patient(Long id, Hospital hospital, String name, String registrationNumber, String genderCode, String dateBirth, String mobilePhoneNumber) {
         this.id = id;
         this.hospital = hospital;
@@ -64,6 +76,8 @@ public class Patient {
         this.dateBirth = dateBirth;
         this.mobilePhoneNumber = mobilePhoneNumber;
     }
+
+
 
     public PatientGetResponse toDto(List<VisitDto> visitDtoList) {
         return PatientGetResponse.builder()
@@ -78,14 +92,14 @@ public class Patient {
                 .build();
     }
 
-    public PatientGetAllResponse toDto(String receptionDate) {
+    public PatientGetAllResponse toDto(String recentReceptionDate) {
         return PatientGetAllResponse.builder()
                 .id(id)
                 .name(name)
                 .registrationNumber(registrationNumber)
                 .genderCode(genderCode)
                 .dateBirth(dateBirth)
-                .receptionDate(receptionDate)
+                .recentReceptionDate(recentReceptionDate)
                 .mobilePhoneNumber(mobilePhoneNumber)
                 .build();
     }

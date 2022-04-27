@@ -26,16 +26,16 @@ public class PatientGetAllResponse {
 
     private String mobilePhoneNumber;
 
-    private String receptionDate;
+    private String recentReceptionDate;
 
     @Builder
-    public PatientGetAllResponse(Long id, String name, String registrationNumber, String genderCode, String dateBirth, String mobilePhoneNumber, String receptionDate) {
+    public PatientGetAllResponse(Long id, String name, String registrationNumber, String genderCode, String dateBirth, String mobilePhoneNumber, String recentReceptionDate) {
         this.id = id;
         this.name = name;
         this.registrationNumber = registrationNumber;
         this.genderCode = genderCode;
         this.dateBirth = dateBirth;
         this.mobilePhoneNumber = mobilePhoneNumber;
-        this.receptionDate = receptionDate;
+        this.recentReceptionDate = recentReceptionDate;
     }
 }
