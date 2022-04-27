@@ -4,6 +4,12 @@
 - Language : Java 11.0.10
 - Build : gradle
 - FrameWork : Spring Boot 2.6.7
+- DB : H2 Embedded
+- ORM : JPA
+
+### 라이브러리
+- Lombok
+- QueryDSL
 
 ### 커밋 컨밴션 정의
 
@@ -25,6 +31,9 @@
 # test     : 테스트 (테스트 코드 추가, 수정, 삭제: 비즈니스 로직에 변경 없음)
 # chore    : 기타 변경사항 (빌드 스크립트 수정 등)
 ```
+
+
+
 
 ### 파일구조
 ```bash
