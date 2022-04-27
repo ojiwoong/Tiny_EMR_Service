@@ -128,7 +128,7 @@ public class PatientController {
 
         if(searchedPatientList != null){
             message.setStatus(StatusEnum.OK);
-            message.setData(searchedPatientList);
+            message.setData(searchedPatientList.getContent());
             message.setMessage("전체 환자 조회 성공");
 
             return ResponseEntity.status(HttpStatus.OK).body(message);
