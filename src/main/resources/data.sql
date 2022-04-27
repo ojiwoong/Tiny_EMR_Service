@@ -27,3 +27,18 @@ INSERT INTO HOSPITAL (name, nursing_institution_number, director_name) VALUES ('
 INSERT INTO HOSPITAL (name, nursing_institution_number, director_name) VALUES ('경기병원', '3', '박경기');
 INSERT INTO HOSPITAL (name, nursing_institution_number, director_name) VALUES ('강원병원', '4', '나강원');
 
+-- 환자
+INSERT INTO PATIENT (date_birth, gender_code, mobile_phone_number, name, registration_number, hospital_id) VALUES ('1994-04-12', 'M', '010-1234-1234', '오지웅', '2022000001', 2);
+INSERT INTO PATIENT (date_birth, gender_code, mobile_phone_number, name, registration_number, hospital_id) VALUES ('1954-06-21', 'M', '010-1345-1345', '유재석', '2022000001', 3);
+INSERT INTO PATIENT (date_birth, gender_code, mobile_phone_number, name, registration_number, hospital_id) VALUES ('1964-04-01', 'M', '010-3453-2343', '조세호', '2022000001', 1);
+INSERT INTO PATIENT (date_birth, gender_code, mobile_phone_number, name, registration_number, hospital_id) VALUES ('1974-02-04', 'F', '010-5234-6234', '신봉선', '2022000002', 1);
+INSERT INTO PATIENT (date_birth, gender_code, mobile_phone_number, name, registration_number, hospital_id) VALUES ('1944-03-19', 'M', '010-4325-4324', '정준하', '2022000003', 1);
+INSERT INTO PATIENT (date_birth, gender_code, mobile_phone_number, name, registration_number, hospital_id) VALUES ('1954-07-16', 'M', '010-4324-4324', '하동훈', '2022000004', 1);
+
+-- 환자 방문
+INSERT INTO VISIT (RECEPTION_DATE, VISIT_STATUS_CODE, HOSPITAL_ID, PATIENT_ID) VALUES ({ts '2022-04-24 10:37:22.69'}, 3, 2, 1);
+INSERT INTO VISIT (RECEPTION_DATE, VISIT_STATUS_CODE, HOSPITAL_ID, PATIENT_ID) VALUES ({ts '2022-04-26 11:47:32.59'}, 2, 2, 1);
+INSERT INTO VISIT (RECEPTION_DATE, VISIT_STATUS_CODE, HOSPITAL_ID, PATIENT_ID) VALUES ({ts '2022-04-25 12:57:42.49'}, 3, 3, 2);
+INSERT INTO VISIT (RECEPTION_DATE, VISIT_STATUS_CODE, HOSPITAL_ID, PATIENT_ID) VALUES ({ts '2022-04-26 14:07:52.39'}, 1, 3, 2);
+
+
