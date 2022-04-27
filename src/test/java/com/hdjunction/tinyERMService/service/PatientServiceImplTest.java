@@ -285,7 +285,12 @@ public class PatientServiceImplTest {
 
 
         // when
-        List<PatientResponse> searchedAllPatient = patientService.getAllPatient();
+        List<PatientResponse> searchedAllPatient = patientService.getAllPatient(PatientSearchKeyword.builder()
+                .name("")
+                .registrationNumber("")
+                .dateBirth("")
+                .build()
+        );
 
         PatientGetAllResponse firstPatient = (PatientGetAllResponse)searchedAllPatient.get(0);
         PatientGetAllResponse secondPatient = (PatientGetAllResponse)searchedAllPatient.get(1);

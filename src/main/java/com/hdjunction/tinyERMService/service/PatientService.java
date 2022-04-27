@@ -19,7 +19,7 @@ public interface PatientService {
     PatientResponse getPatient(Long patientId);
 
     // 전체 환자 목록 조회
-    List<PatientResponse> getAllPatient();
+    List<PatientResponse> getAllPatient(PatientSearchKeyword patientSearchKeyword);
 
     // 환자 등록번호 생성
     String createRegistrationNumber(Long hospitalId);
