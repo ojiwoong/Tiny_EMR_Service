@@ -4,8 +4,12 @@ import com.hdjunction.tinyERMService.dto.*;
 import com.hdjunction.tinyERMService.entity.Hospital;
 import com.hdjunction.tinyERMService.entity.Patient;
 import com.hdjunction.tinyERMService.entity.Visit;
+import com.hdjunction.tinyERMService.querydsl.PatientRepositoryCustom;
+import com.hdjunction.tinyERMService.querydsl.PatientRepositoryImpl;
+import com.hdjunction.tinyERMService.querydsl.PatientSearchKeyword;
 import com.hdjunction.tinyERMService.repository.HospitalRepository;
 import com.hdjunction.tinyERMService.repository.PatientRepository;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,8 +18,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -26,7 +38,7 @@ import java.util.Optional;
 
 
 @ExtendWith(SpringExtension.class)
-@Import({PatientServiceImpl.class, PatientRepository.class, HospitalRepository.class})
+@Import({PatientServiceImpl.class, PatientRepository.class, HospitalRepository.class, PatientRepositoryImpl.class})
 public class PatientServiceImplTest {
     Logger log = (Logger) LoggerFactory.getLogger(PatientServiceImplTest.class);
 
@@ -35,6 +47,9 @@ public class PatientServiceImplTest {
 
     @MockBean
     HospitalRepository hospitalRepository;
+
+    @MockBean
+    PatientRepositoryImpl patientRepositoryImpl;
 
     @Autowired
     PatientServiceImpl patientService;
@@ -278,22 +293,29 @@ public class PatientServiceImplTest {
                                 .visitList(visitList)
                                 .build());
 
+        Pageable pageable =  PageRequest.of(1, 8);
+
+        Page<Patient>  patients = new PageImpl(patientList, pageable, patientList.size());
+
         // given
         // 조회될 환자 mock 객체 생성
-        Mockito.when(patientRepository.findAll())
-                .thenReturn(patientList);
-
+        Mockito.when(patientRepositoryImpl.findByAllSearchKeyword(PatientSearchKeyword.builder()
+                        .name("")
+                        .registrationNumber("")
+                        .dateBirth("")
+                        .build(), pageable))
+                .thenReturn(patients);
 
         // when
-        List<PatientResponse> searchedAllPatient = patientService.getAllPatient(PatientSearchKeyword.builder()
+        Page<PatientResponse> searchedAllPatient = patientService.getAllPatient(PatientSearchKeyword.builder()
                 .name("")
                 .registrationNumber("")
                 .dateBirth("")
-                .build()
+                .build(), pageable
         );
 
-        PatientGetAllResponse firstPatient = (PatientGetAllResponse)searchedAllPatient.get(0);
-        PatientGetAllResponse secondPatient = (PatientGetAllResponse)searchedAllPatient.get(1);
+        PatientGetAllResponse firstPatient = (PatientGetAllResponse)searchedAllPatient.getContent().get(0);
+        PatientGetAllResponse secondPatient = (PatientGetAllResponse)searchedAllPatient.getContent().get(1);
 
         log.info("전체 조회된 환자 => " + searchedAllPatient);
 
