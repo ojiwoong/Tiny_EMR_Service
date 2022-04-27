@@ -30,3 +30,8 @@ spring:
   sql:
     init:
       mode: always
+  data:
+    web:
+      pageable:
+        # 페이징 처리 page 를 1페이지부터 (false 시 0 페이지부터 시작)
+        one-indexed-parameters: true

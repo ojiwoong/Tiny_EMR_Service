@@ -1,4 +1,4 @@
-package com.hdjunction.tinyERMService.dto;
+package com.hdjunction.tinyERMService.querydsl;
 
 import lombok.Builder;
 import lombok.Getter;
