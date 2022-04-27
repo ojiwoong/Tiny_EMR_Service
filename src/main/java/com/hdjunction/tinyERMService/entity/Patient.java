@@ -1,6 +1,7 @@
 package com.hdjunction.tinyERMService.entity;
 
-import com.hdjunction.tinyERMService.dto.PatientResponse;
+import com.hdjunction.tinyERMService.dto.PatientGetAllResponse;
+import com.hdjunction.tinyERMService.dto.PatientGetResponse;
 import com.hdjunction.tinyERMService.dto.VisitDto;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -49,7 +50,8 @@ public class Patient {
     private String mobilePhoneNumber;
 
     // 방문 리스트
-    @OneToMany(mappedBy = "patient")
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OrderBy("receptionDate desc")
     private List<Visit> visitList = new ArrayList<>();
 
     @Builder
@@ -63,15 +65,27 @@ public class Patient {
         this.mobilePhoneNumber = mobilePhoneNumber;
     }
 
-    public PatientResponse toDto(List<VisitDto> visitDto) {
-        return PatientResponse.builder()
+    public PatientGetResponse toDto(List<VisitDto> visitDtoList) {
+        return PatientGetResponse.builder()
                 .id(id)
                 .hospital(hospital)
                 .name(name)
                 .registrationNumber(registrationNumber)
                 .genderCode(genderCode)
                 .dateBirth(dateBirth)
-                .visit(visitDto)
+                .visit(visitDtoList)
+                .mobilePhoneNumber(mobilePhoneNumber)
+                .build();
+    }
+
+    public PatientGetAllResponse toDto(String receptionDate) {
+        return PatientGetAllResponse.builder()
+                .id(id)
+                .name(name)
+                .registrationNumber(registrationNumber)
+                .genderCode(genderCode)
+                .dateBirth(dateBirth)
+                .receptionDate(receptionDate)
                 .mobilePhoneNumber(mobilePhoneNumber)
                 .build();
     }

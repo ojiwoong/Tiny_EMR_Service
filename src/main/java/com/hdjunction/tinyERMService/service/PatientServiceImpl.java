@@ -1,9 +1,6 @@
 package com.hdjunction.tinyERMService.service;
 
-import com.hdjunction.tinyERMService.dto.PatientCreateRequest;
-import com.hdjunction.tinyERMService.dto.PatientResponse;
-import com.hdjunction.tinyERMService.dto.PatientUpdateRequest;
-import com.hdjunction.tinyERMService.dto.VisitDto;
+import com.hdjunction.tinyERMService.dto.*;
 import com.hdjunction.tinyERMService.entity.Hospital;
 import com.hdjunction.tinyERMService.entity.Patient;
 import com.hdjunction.tinyERMService.repository.HospitalRepository;
@@ -13,8 +10,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,6 +45,7 @@ public class PatientServiceImpl implements PatientService{
 
     // 환자 수정
     @Override
+    @Transactional
     public Patient updatePatient(Long patientId, PatientUpdateRequest patientUpdateRequest) {
         // 수정할 환자 조회
         Patient patient = patientRepository.findById(patientId).orElse(null);
@@ -67,13 +65,14 @@ public class PatientServiceImpl implements PatientService{
 
     // 환자 삭제
     @Override
+    @Transactional
     public void deletePatient(Long patientId) {
         patientRepository.deleteById(patientId);
     }
 
     // 환자 id 조회
     @Override
-    public PatientResponse getPatient(Long patientId) {
+    public PatientGetResponse getPatient(Long patientId) {
         Patient patient = patientRepository.findById(patientId).orElse(null);
 
         // 양방향 1:N 관계 순환참조 방지를 위해 visitDtoList 에 필요한 데이터만 담기
@@ -81,6 +80,36 @@ public class PatientServiceImpl implements PatientService{
                                                                     .collect(Collectors.toList());
 
         return patient.toDto(visitDtoList);
+    }
+
+    // 전체 환자 조회
+    @Override
+    public List<PatientGetAllResponse> getAllPatient() {
+
+        List<PatientGetAllResponse> patientGetAllResponseList = new ArrayList<>();
+
+        List<Patient> patientList = patientRepository.findAll();
+
+        // 양방향 1:N 관계 순환참조 방지를 위해 visitDtoList 에 필요한 데이터만 담기
+        patientList.forEach(patient -> {
+            List<VisitDto> visitDtoList = patient.getVisitList().stream().map(visit -> new VisitDto(visit))
+                                                                            .collect(Collectors.toList());
+
+            VisitDto visitDto = null;
+            String receptionDate = "";
+
+            int recentVisitIdx = 0;
+            // 환자 엔티티의 visitList Order by 설정을 접수일시의 내림차순으로 설정했기 때문에 0번째 있는 환자방문 데이터가 최근방문시간
+            // 그렇기 때문에 환자 방문 데이터가 있을경우 최근방문 데이터인 0번째 환자 방문 데이터를 추출
+            if(visitDtoList.size() > 0) {
+                visitDto = visitDtoList.get(recentVisitIdx);
+                receptionDate = visitDto.getReceptionDate().toString();
+            }
+
+            patientGetAllResponseList.add(patient.toDto(receptionDate));
+        });
+
+        return patientGetAllResponseList;
     }
 
     // 환자 등록번호 생성

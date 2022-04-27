@@ -1,7 +1,7 @@
 package com.hdjunction.tinyERMService.service;
 
 import com.hdjunction.tinyERMService.dto.PatientCreateRequest;
-import com.hdjunction.tinyERMService.dto.PatientResponse;
+import com.hdjunction.tinyERMService.dto.PatientGetResponse;
 import com.hdjunction.tinyERMService.dto.PatientUpdateRequest;
 import com.hdjunction.tinyERMService.entity.Hospital;
 import com.hdjunction.tinyERMService.entity.Patient;
@@ -20,8 +20,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 
@@ -215,7 +213,7 @@ public class PatientServiceImplTest {
 
 
         // when
-        PatientResponse searchedPatient = patientService.getPatient(2L);
+        PatientGetResponse searchedPatient = patientService.getPatient(2L);
 
         log.info("id 조회된 환자 => " + searchedPatient);
 

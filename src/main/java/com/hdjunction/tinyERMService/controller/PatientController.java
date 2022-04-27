@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/")
 public class PatientController {
@@ -96,7 +98,7 @@ public class PatientController {
     public ResponseEntity<Message> getPatient(@PathVariable(name = "id") Long id){
 
         // 환자 조회 서비스 호출
-        PatientResponse searchedPatient = patientService.getPatient(id);
+        PatientGetResponse searchedPatient = patientService.getPatient(id);
 
         Message message = new Message();
 
@@ -113,9 +115,21 @@ public class PatientController {
 
     // 전체 환자 조회
     @GetMapping("/patient")
-    public ResponseEntity<Message> getAllPatient(@PathVariable(name = "id") Long id){
+    public ResponseEntity<Message> getAllPatient(){
+
+        // 전체 환자 조회 서비스 호출
+        List<PatientGetAllResponse> searchedPatientList = patientService.getAllPatient();
 
         Message message = new Message();
-        return ResponseEntity.status(HttpStatus.OK).body(message);
+
+        if(searchedPatientList != null){
+            message.setStatus(StatusEnum.OK);
+            message.setData(searchedPatientList);
+            message.setMessage("전체 환자 조회 성공");
+
+            return ResponseEntity.status(HttpStatus.OK).body(message);
+        }
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message);
     }
 }

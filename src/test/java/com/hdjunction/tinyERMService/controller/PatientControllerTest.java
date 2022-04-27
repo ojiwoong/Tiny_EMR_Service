@@ -1,15 +1,12 @@
 package com.hdjunction.tinyERMService.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hdjunction.tinyERMService.dto.PatientCreateRequest;
-import com.hdjunction.tinyERMService.dto.PatientResponse;
+import com.hdjunction.tinyERMService.dto.PatientGetResponse;
 import com.hdjunction.tinyERMService.dto.PatientUpdateRequest;
 import com.hdjunction.tinyERMService.dto.VisitDto;
 import com.hdjunction.tinyERMService.entity.Hospital;
 import com.hdjunction.tinyERMService.entity.Patient;
-import com.hdjunction.tinyERMService.repository.HospitalRepository;
-import com.hdjunction.tinyERMService.repository.PatientRepository;
 import com.hdjunction.tinyERMService.service.PatientServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -201,7 +197,7 @@ public class PatientControllerTest {
         // given : Mock 객체가 특정 상황에서 해야하는 행위를 정의하는 메소드
         given(patientService.getPatient(2L))
                 .willReturn(
-                        new PatientResponse(2L, hospital, "오지웅", "202200001"
+                        new PatientGetResponse(2L, hospital, "오지웅", "202200001"
                                             ,"M", "1994-04-12", "010-1234-1234", visitDtoList)
                 );
 

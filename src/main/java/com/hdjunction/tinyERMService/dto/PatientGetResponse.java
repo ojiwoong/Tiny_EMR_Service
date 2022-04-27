@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PatientResponse {
+public class PatientGetResponse {
     private Long id;
 
     private Hospital hospital;
@@ -31,7 +31,7 @@ public class PatientResponse {
     private List<VisitDto> visit = new ArrayList<>();
 
     @Builder
-    public PatientResponse(Long id, Hospital hospital, String name, String registrationNumber, String genderCode, String dateBirth, String mobilePhoneNumber, List<VisitDto> visit) {
+    public PatientGetResponse(Long id, Hospital hospital, String name, String registrationNumber, String genderCode, String dateBirth, String mobilePhoneNumber, List<VisitDto> visit) {
         this.id = id;
         this.hospital = hospital;
         this.name = name;

@@ -1,9 +1,12 @@
 package com.hdjunction.tinyERMService.service;
 
 import com.hdjunction.tinyERMService.dto.PatientCreateRequest;
-import com.hdjunction.tinyERMService.dto.PatientResponse;
+import com.hdjunction.tinyERMService.dto.PatientGetAllResponse;
+import com.hdjunction.tinyERMService.dto.PatientGetResponse;
 import com.hdjunction.tinyERMService.dto.PatientUpdateRequest;
 import com.hdjunction.tinyERMService.entity.Patient;
+
+import java.util.List;
 
 public interface PatientService {
     // 환자 등록
@@ -16,7 +19,10 @@ public interface PatientService {
     void deletePatient(Long patientId);
 
     // 환자 id 조회
-    PatientResponse getPatient(Long patientId);
+    PatientGetResponse getPatient(Long patientId);
+
+    // 전체 환자 목록 조히
+    List<PatientGetAllResponse> getAllPatient();
 
     // 환자 등록번호 생성
     String createRegistrationNumber(Long hospitalId);
