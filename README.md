@@ -1,4 +1,4 @@
-## Tiny_EMR_Service
+## Tiny_Hospital_Service
 
 ### 프로젝트 환경
 - Language : Java 11.0.10
