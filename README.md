@@ -35,7 +35,7 @@
 
 
 
-### 파일구조
+### 파일 구조
 ```bash
 ├── src/
 │    ├── main/
@@ -89,6 +89,16 @@
 │     
 ├── README.md
 └── build.gradle
+``` 
+
+### 브랜치 구조
+```bash
+├── master: Release(배포)출시 할 수 있는 브랜치
+├── develope: 다음 출시 버전을 개발하는 브랜치
+└── feature/ : 기능을 개발하는 브랜치 (Local)
+     └── patient-CRUD: 환자 CRUD 기능 구현 브랜치
+     └── apply-querydsl: 환자 내역 조회 querydsl 기능 구현 브랜치
+     └── apply-paging: 환자 내역 조회 페이징 기능 구현 브랜치
 ``` 
 
 ### RESTful API 명세서 정의
