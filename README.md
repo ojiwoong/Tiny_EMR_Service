@@ -1,4 +1,4 @@
-## Tiny_Hospital_Service
+## tiny_hospital_service
 
 ### 프로젝트 환경
 - Language : Java 11.0.10
